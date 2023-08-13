@@ -38,6 +38,7 @@
 		"@auth/sveltekit": "^0.3.6",
 		"@trpc/client": "^10.37.1",
 		"@trpc/server": "^10.37.1",
+		"cross-env": "^7.0.3",
 		"trpc-sveltekit": "^3.5.20",
 		"zod": "^3.21.4"
 	}

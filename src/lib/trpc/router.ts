@@ -1,7 +1,10 @@
-import { t } from '$lib/trpc/t';
+import { protectedProcedure, publicProcedure, t } from '$lib/trpc/t';
 export const router = t.router({
-  greeting: t.procedure.query(async () => {
+  greeting: publicProcedure.query(async () => {
     return `Hello tRPC v10 @ ${new Date().toLocaleTimeString()}`;
+  }),
+  secret: protectedProcedure.query(async () => {
+    return `Hello secret world @ ${new Date().toLocaleTimeString()}`;
   })
 });
 

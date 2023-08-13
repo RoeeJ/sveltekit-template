@@ -5,7 +5,7 @@ import { createTRPCHandle } from 'trpc-sveltekit';
 import { z } from 'zod';
 import { sequence } from '@sveltejs/kit/hooks';
 
-import {SvelteKitAuth} from "@auth/sveltekit"
+import { SvelteKitAuth } from "@auth/sveltekit"
 import GitHub from '@auth/core/providers/github'
 import Facebook from '@auth/core/providers/facebook'
 import Google from '@auth/core/providers/google'
@@ -18,18 +18,25 @@ import CredentialsProvider from '@auth/core/providers/credentials';
 //   GOOGLE_ID,
 //   GOOGLE_SECRET
 // } from "$env/static/private"
-
 const authHandler = SvelteKitAuth({
+	callbacks: {
+		session: ({ session, token }) => ({
+			...session,
+			user: {
+				...session.user,
+				id: token.sub,
+			},
+		})
+	},
 	providers: [
 		CredentialsProvider({
 			id: 'credentials', name: 'Credentials',
 			credentials: {
-				username: { label: "Username", value: "admin", type: "text"},
+				username: { label: "Username", value: "admin", type: "text" },
 				password: { label: "Password", type: "password", value: "admin" }
 			},
 			async authorize(credentials, req) {
-				z.object({username: z.string(), password: z.string()}).parse(credentials);
-				console.log(credentials);
+				z.object({ username: z.string(), password: z.string() }).parse(credentials);
 				return {
 					id: credentials.username,
 					name: credentials.username,

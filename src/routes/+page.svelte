@@ -2,13 +2,16 @@
 	import { trpc } from '$lib/trpc/client';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import * as Auth from '$lib/auth';
+	import { authStore } from '$lib/auth';
+	let greeting = '';
+	let secret = '';
 	async function handleClick() {
 		greeting = await trpc($page).greeting.query();
+		if ($authStore) {
+		}
 	}
-	let greeting = '';
 	onMount(async () => {
-		greeting = await trpc($page).greeting.query();
+		handleClick();
 	});
 </script>
 
@@ -17,19 +20,18 @@
 
 <button on:click={handleClick}>Click me</button>
 
-{#if greeting}
-	<p>{greeting}</p>
-{/if}
+<p>{greeting}</p>
 
-{#await Auth.getUser()}
-	<p>Checking session...</p>
-{:then user}
-	{#if user}
-		<p>Hi {JSON.stringify(user, null, 4)}</p>
-		<a href="/auth/signout">Sign out</a>
-	{:else}
-		<a href="/auth/signin">Sign in</a>
-	{/if}
-{:catch error}
-	<p>{error}</p>
-{/await}
+{#if $authStore}
+	{@const user = $authStore}
+	{@const secretProm = trpc($page).secret.query()}
+	<p>Hi {user.name}</p>
+	{#await secretProm}
+		<p>loading...</p>
+	{:then secret}
+		<p>{secret}</p>
+	{/await}
+	<a href="/auth/signout">Sign out</a>
+{:else}
+	<a href="/auth/signin">Sign in</a>
+{/if}
