@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "e9e08511-76ad-4b7d-9c2f-724f76c4e49a",
+  "id": "ce4d6b27-27a1-40ac-a73c-f1a806733e02",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "password_resets": {
@@ -122,6 +122,20 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "fname": {
+          "name": "fname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "lname": {
+          "name": "lname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
         },
         "password": {
           "name": "password",

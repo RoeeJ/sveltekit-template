@@ -1,5 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+//import type {SvelteToastOptions} from '@zerodevx/svelte-toast';
+import type {SvelteToastOptions} from '@zerodevx/svelte-toast/stores';
 declare global {
 	interface User {
 		id: string;
@@ -21,13 +23,18 @@ declare global {
 	}
 	namespace App {
 		interface Locals {
-			getSession(): Promise<JWTSession|null>;
+			getSession(): Promise<JWTSession | null>;
 			setSession(session: Session): Promise<void>;
 			deleteSession(): Promise<void>;
-			flash(type: string, message: string): void;
+			getCookie(name: string): string | undefined;
+			setCookie(name: string, value: string): void;
+			deleteCookie(name: string): void;
+			flash(opts: SvelteToastOptions|string): void;
+			flashMessages: (SvelteToastOptions|string)[];
 		}
 		interface PageData {
 			session: Session | null;
+			flashMessages: ToastSettings[];
 		}
 		// interface Error {}
 		// interface Locals {}

@@ -1,38 +1,52 @@
-# create-svelte
+# SvelteKit, tRPC, and PostgreSQL Template Repository
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This repository is a template for [SvelteKit](https://kit.svelte.dev/) projects, using TypeScript, JWT-based authentication, [tRPC](https://trpc.io/) for type-safe APIs, [Zod](https://zod.dev) for TypeScript-friendly schema validation, and [Drizzle](https://www.drizzle-orm.com/) for querying PostgreSQL databases.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+-   TypeScript for type-safe code in both front-end and back-end
+-   Minimal setup with JWT for authentication
+-   tRPC for fast, easy and type-safe data fetching
+-   Zod for TypeScript-friendly schema validation
+-   Drizzle for querying PostgreSQL databases
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Get Started
 
 ```bash
+# Clone the repository
+git clone https://github.com/RoeeJ/sveltekit-template.git
+
+# Enter the repository
+cd sveltekit-template
+
+# Install dependencies
+npm install
+
+# Run the application in development mode
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## How to Use
 
-To create a production version of your app:
+1. **Modify your repository:** After cloning the template, you can add, modify, or remove components or services to fit your specific project requirements.
+2. **Modify authentication:** If you have a specific auth flow, you can modify authentication files to implement your JWT handling.
+3. **Test your project:** Using your preferred test framework, ensure your modifications work as expected.
 
-```bash
-npm run build
-```
+## References
 
-You can preview the production build with `npm run preview`.
+-   [SvelteKit](https://kit.svelte.dev/)
+-   [tRPC](https://trpc.io/)
+-   [Zod](https://zod.dev)
+-   [Drizzle](https://www.drizzle-orm.com/)
+-   [TypeScript](https://www.typescriptlang.org/)
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Support
+
+If you have any questions or need help with your project, feel free to open an issue or contact us directly.
+
+We hope you find this template useful!
+
+## License
+
+MIT
+

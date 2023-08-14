@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS "user_sessions" (
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" text NOT NULL,
+	"fname" text DEFAULT '' NOT NULL,
+	"lname" text DEFAULT '' NOT NULL,
 	"password" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,

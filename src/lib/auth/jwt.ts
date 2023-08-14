@@ -9,7 +9,7 @@ export const signSession = async (session: Session) => {
 	}
 	const token = jwt.sign(session, process.env.JWT_SECRET,{
 		notBefore: 0,
-		expiresIn: "15s",
+		expiresIn: "1d",
 		issuer: "sveltekit-trpc",
 		subject: session.user.id.toString(),
 	});
@@ -20,6 +20,6 @@ export const verifySession = async (token: string) => {
 	if (!process.env.JWT_SECRET) {
 		throw new Error("JWT_SECRET not set");
 	}
-	return jwt.verify(token, process.env.JWT_SECRET);
+	return jwt.verify(token, process.env.JWT_SECRET) as JWTSession;
 }
 

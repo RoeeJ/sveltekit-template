@@ -1,13 +1,14 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { RequestEvent } from "@sveltejs/kit";
+import { defaultCookieOpts } from "$lib/util";
 export async function createContext(evt: RequestEvent) {
   const session = await evt.locals.getSession();
   return {
     session,
-    ipAddress: evt.getClientAddress(),
-    setHeaders: evt.setHeaders,
-    ur: evt.url,
+    locals: evt.locals,
+    clientIp: evt.getClientAddress(),
+    cookies: evt.cookies,
   };
 }
 

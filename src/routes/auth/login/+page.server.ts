@@ -17,15 +17,23 @@ export const actions: Actions = {
 	default: async (evt) => {
 		let fd = await evt.request.formData();
 		let credentials = Object.fromEntries(fd.entries());
-		let validated = loginSchema.parse(credentials);
-		let loginResult = await Login(validated.email, validated.password);
+		let validated = loginSchema.safeParse(credentials);
+		if(!validated.success) {
+			evt.locals.flash({
+				msg: JSON.stringify(validated.error.format()),
+			});
+			return
+		}
+		let loginResult = await Login(validated.data.email, validated.data.password);
 		if(loginResult == null) {
-			evt.locals.flash("error", "Invalid credentials");
-			throw redirect(302,"/auth/login");
+			evt.locals.flash({
+				msg: "Invalid email or password",
+			});
+			return
 		}
 		let session = sessionSchema.parse(loginResult);
 		evt.locals.setSession(session);
-		evt.locals.flash("success", "Logged in successfully");
-		throw redirect(302, "/");
+		const retUrl = evt.url.searchParams.get("redirectTo") ?? "/";
+		throw redirect(302, retUrl);
 	}
 }
