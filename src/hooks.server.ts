@@ -2,54 +2,43 @@ import { createContext } from '$lib/trpc/t';
 import { router } from '$lib/trpc/router';
 import type { Handle } from '@sveltejs/kit';
 import { createTRPCHandle } from 'trpc-sveltekit';
-import { z } from 'zod';
 import { sequence } from '@sveltejs/kit/hooks';
-
-import { SvelteKitAuth } from "@auth/sveltekit"
-import GitHub from '@auth/core/providers/github'
-import Facebook from '@auth/core/providers/facebook'
-import Google from '@auth/core/providers/google'
-import CredentialsProvider from '@auth/core/providers/credentials';
-// import { 
-//   GITHUB_ID,
-//   GITHUB_SECRET,
-//   FACEBOOK_ID,
-//   FACEBOOK_SECRET,
-//   GOOGLE_ID,
-//   GOOGLE_SECRET
-// } from "$env/static/private"
-const authHandler = SvelteKitAuth({
-	callbacks: {
-		session: ({ session, token }) => ({
-			...session,
-			user: {
-				...session.user,
-				id: token.sub,
-			},
-		})
-	},
-	providers: [
-		CredentialsProvider({
-			id: 'credentials', name: 'Credentials',
-			credentials: {
-				username: { label: "Username", value: "admin", type: "text" },
-				password: { label: "Password", type: "password", value: "admin" }
-			},
-			async authorize(credentials, req) {
-				z.object({ username: z.string(), password: z.string() }).parse(credentials);
-				return {
-					id: credentials.username,
-					name: credentials.username,
-					email: credentials.username + "@example.com",
-				}
-
-			}
-		})
-		// GitHub({ clientId: GITHUB_ID, clientSecret: GITHUB_SECRET }),
-		// Facebook({ clientId: FACEBOOK_ID, clientSecret: FACEBOOK_SECRET }),
-		// Google({ clientId: GOOGLE_ID, clientSecret: GOOGLE_SECRET })
-	],
-})
+import { signSession, verifySession } from '$lib/auth/jwt';
 const trpcHandler = createTRPCHandle({ router, createContext });
-export const handle: Handle = sequence(authHandler, trpcHandler);
+export const flashResolver: Handle = async ({ event, resolve }) => {
+	event.locals.flash = (type: string, message: string) => {
+		console.log(type, message);
+	}
+	return resolve(event);
+};
+export const sessionResolver: Handle = async ({ event, resolve }) => {
+	const cookieOpts = {
+		path: '/',
+		httpOnly: true,
+		expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+	};
+	event.locals.getSession = async () => {
+		let tokenCookie = event.cookies.get('jwt');
+		if (!tokenCookie) {
+			return null;
+		}
+		try {
+			let session = await verifySession(tokenCookie);
+			return session as Session;
+		} catch (e) {
+			event.locals.deleteSession();
+			return null;
+		}
+	};
+	event.locals.setSession = async (session: Session) => {
+		const token = await signSession(session);
+		event.cookies.set('jwt', token, cookieOpts);
+	}
+	event.locals.deleteSession = async () => {
+		event.cookies.delete('jwt', cookieOpts);
+	}
+
+	return resolve(event);
+};
+export const handle: Handle = sequence(flashResolver, sessionResolver, trpcHandler);
 

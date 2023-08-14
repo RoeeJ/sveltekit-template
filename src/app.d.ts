@@ -1,17 +1,30 @@
-import type { DefaultSession, User as DefaultUser } from "@auth/core/types";
-
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
-	interface User extends DefaultUser {
-		id: string
+	interface User {
+		id: string;
+		fname: string;
+		lname: string;
+		email: string;
+		password?: string;
+		createdAt: Date;
+		updatedAt?: Date;
 	};
-	interface Session extends DefaultSession {
+	interface Session {
 		user?: User;
+	}
+	interface JWTSession extends Session {
+		iat: number;
+		exp: number;
+		iss: string;
+		sub: string;
 	}
 	namespace App {
 		interface Locals {
-			getSession(): Promise<| null>;
+			getSession(): Promise<JWTSession|null>;
+			setSession(session: Session): Promise<void>;
+			deleteSession(): Promise<void>;
+			flash(type: string, message: string): void;
 		}
 		interface PageData {
 			session: Session | null;

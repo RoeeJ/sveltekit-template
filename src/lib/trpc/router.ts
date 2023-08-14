@@ -1,11 +1,7 @@
 import { protectedProcedure, publicProcedure, t } from '$lib/trpc/t';
+import { authRouter } from './routers/auth';
 export const router = t.router({
-  greeting: publicProcedure.query(async () => {
-    return `Hello tRPC v10 @ ${new Date().toLocaleTimeString()}`;
-  }),
-  secret: protectedProcedure.query(async () => {
-    return `Hello secret world @ ${new Date().toLocaleTimeString()}`;
-  })
+  auth: authRouter,
 });
 
 export type Router = typeof router;

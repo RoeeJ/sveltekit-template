@@ -1,12 +1,13 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { RequestEvent } from "@sveltejs/kit";
-import { getUser } from "$lib/auth";
 export async function createContext(evt: RequestEvent) {
   const session = await evt.locals.getSession();
   return {
     session,
-    // context information
+    ipAddress: evt.getClientAddress(),
+    setHeaders: evt.setHeaders,
+    ur: evt.url,
   };
 }
 

@@ -4,8 +4,13 @@ import { browser } from "$app/environment";
 import type { RequestEvent, ServerLoadEvent } from "@sveltejs/kit";
 
 export const authStore = derived(page, ($page) => {
-	return $page.data.session?.user;
+	return $page.data.session;
 });
+
+export const userStore = derived(authStore, ($auth) => {
+	return $auth?.user;
+});
+
 export async function getUser(evt?: ServerLoadEvent|RequestEvent): Promise<User|undefined> {
 	if (browser) {
 		const user = get(page).data.session?.user;
