@@ -4,4 +4,7 @@ const signupInput = z.object({ email: z.string().email(), password: z.string().m
 const loginSchema = z.object({ email: z.string().email(), password: z.string().min(6, 'Password must be longer than 6 characters') });
 
 export const authRouter = t.router({
+    getMe: publicProcedure.query(({ctx}) => {
+        return ctx.session;
+    })
 });

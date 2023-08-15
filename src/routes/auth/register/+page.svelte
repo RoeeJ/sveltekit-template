@@ -1,20 +1,31 @@
 <script lang="ts">
 	import { trpc } from '$lib/trpc/client';
 	import { page } from '$app/stores';
-	let email: string = 'admin@admin.com';
-	let password: string = 'admin123';
-	async function handleSubmit() {
-		trpc($page).auth.signup.mutate({ email, password });
-	}
+	import { onMount } from 'svelte';
+
+	let email = '';
+	let password = '';
 </script>
 
-<div>
-	<h1>Register</h1>
-	<form action="/auth/register" method="post">
-		<label for="email">Email</label>
-		<input type="email" name="email" id="email" bind:value={email} />
-		<label for="password">Password</label>
-		<input type="password" name="password" id="password" bind:value={password} />
-		<button type="submit">Register</button>
-	</form>
-</div>
+<form
+	class="flex flex-col justify-center h-full items-center gap-4"
+	action="/auth/register"
+	method="post"
+>
+	<label for="email">Email</label>
+	<input class="input input-bordered" type="email" name="email" id="email" />
+	<label for="email">First Name</label>
+	<input class="input input-bordered" type="text" name="fname" id="fname" />
+	<label for="email">Last Name</label>
+	<input class="input input-bordered" type="text" name="lname" id="lname" />
+
+	<label for="password">Password</label>
+	<input
+		class="input input-bordered"
+		type="password"
+		name="password"
+		id="password"
+		bind:value={password}
+	/>
+	<button class="btn btn-accent w-full" type="submit">Register</button>
+</form>
