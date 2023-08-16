@@ -1,19 +1,14 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 //import type {SvelteToastOptions} from '@zerodevx/svelte-toast';
+import type { userSelectSchema } from '$lib/db/auth/schema';
 import type {SvelteToastOptions} from '@zerodevx/svelte-toast/stores';
+import type { z } from 'zod';
 declare global {
-	interface User {
-		id: string;
-		fname: string;
-		lname: string;
-		email: string;
-		password?: string;
-		createdAt: Date;
-		updatedAt?: Date;
-	};
-	interface Session {
+	type User = z.infer<typeof userSelectSchema>;
+	type Session = {
 		user?: User;
+		sessionId: string;
 	}
 	interface JWTSession extends Session {
 		iat: number;
@@ -34,7 +29,7 @@ declare global {
 		}
 		interface PageData {
 			session: Session | null;
-			flashMessages: ToastSettings[];
+			flashMessages: SvelteToastOptions[];
 		}
 		// interface Error {}
 		// interface Locals {}

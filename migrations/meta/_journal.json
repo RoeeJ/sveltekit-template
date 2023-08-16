@@ -8,6 +8,20 @@
       "when": 1692037224934,
       "tag": "0000_green_ultimates",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1692164975425,
+      "tag": "0001_silky_magneto",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1692173379812,
+      "tag": "0002_third_ben_grimm",
+      "breakpoints": true
     }
   ]
 }

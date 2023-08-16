@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { trpc } from '$lib/trpc/client';
-	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 	import { authStore, userStore } from '$lib/auth';
 </script>
 
@@ -10,7 +7,9 @@
 	<p>
 		Visit <a class="hyperlink" href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
 	</p>
-
+	<p>
+		Visit <a class="hyperlink" href="/todos">todos</a> to see the todos example
+	</p>
 	{#if $authStore}
 		{@const user = $userStore}
 		<p>Hi {user?.fname}</p>

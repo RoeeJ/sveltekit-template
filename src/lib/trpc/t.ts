@@ -1,7 +1,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { RequestEvent } from "@sveltejs/kit";
-import { defaultCookieOpts } from "$lib/util";
+import superjson from 'superjson';
 export async function createContext(evt: RequestEvent) {
   const session = await evt.locals.getSession();
   return {
@@ -14,7 +14,9 @@ export async function createContext(evt: RequestEvent) {
 
 export type Context = inferAsyncReturnType<typeof createContext>;
 
-export const t = initTRPC.context<Context>().create();
+export const t = initTRPC.context<Context>().create({
+  transformer: superjson,
+});
 
 export const publicProcedure = t.procedure;
 

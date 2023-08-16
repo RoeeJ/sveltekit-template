@@ -5,6 +5,7 @@ import { createTRPCHandle } from 'trpc-sveltekit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { signSession, verifySession } from '$lib/auth/jwt';
 import { defaultCookieOpts } from '$lib/util';
+import type { SvelteToastOptions } from '@zerodevx/svelte-toast/stores';
 
 const requestHelpers: Handle = ({ event, resolve }) => {
 	event.locals.setCookie = (name: string, value: string) => {
@@ -36,7 +37,7 @@ const trpcHandler = createTRPCHandle({
 	}
 });
 export const flashResolver: Handle = async ({ event, resolve }) => {
-	event.locals.flash = (opts: ToastSettings) => {
+	event.locals.flash = (opts: SvelteToastOptions) => {
 		if (!event.locals.flashMessages) {
 			event.locals.flashMessages = [];
 		}
@@ -55,6 +56,7 @@ export const sessionResolver: Handle = async ({ event, resolve }) => {
 			return session;
 		} catch (e) {
 			event.locals.deleteSession();
+			console.error(e);
 			return null;
 		}
 	};
@@ -69,4 +71,5 @@ export const sessionResolver: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 export const handle: Handle = sequence(requestHelpers, flashResolver, sessionResolver, trpcHandler);
+
 

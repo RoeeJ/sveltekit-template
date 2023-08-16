@@ -1,6 +1,9 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { pgEnum, pgTable, pgView, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { gt, relations } from 'drizzle-orm';
 import {createInsertSchema, createSelectSchema} from 'drizzle-zod';
+
+export const userRole = pgEnum('user_role', ['user', 'admin']);
+
 export const userTable = pgTable('users', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	email: text('email').unique().notNull(),
@@ -9,6 +12,7 @@ export const userTable = pgTable('users', {
 	password: text('password').notNull(),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
+	role: userRole('role').notNull().default('user'),
 });
 
 export const userInsertSchema = createInsertSchema(userTable);
